@@ -1,0 +1,242 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="en-us">
+<head>
+    <title>ITUNES</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="shortcut icon" href="/image/favicon.ico">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+
+    <!-- jQuery first, then Tether, then Bootstrap JS. -->
+    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="css/js/date_time.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+
+    <style>
+    #container {
+    width: 60%;
+    background-color: #FFFFFF;
+    margin-bottom: 0px;
+    margin: 0 auto;
+    text-align: left;
+    min-height: 600px;
+    }
+
+
+    </style>
+
+</head>
+
+<body>
+<div id="container">
+
+    <!--Nav Bar Set Up -->
+	<nav class="navbar navbar-toggleable-md navbar-light bg-faded">
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item active">
+            <a class="nav-link" href="strat">Strategic Network Planner </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="stratover">Strategic Overview <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="field">Field Network Planner</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="fieldover">Field Overview</a>
+          </li>
+          <form id = "uploadForm" enctype   =  "multipart/form-data" action = "uploadZipTechAssign" method = "post">
+              <input type="file" name="file" />
+              <input type="submit" value="Add Zip Tech Assignment" name="submit">
+          </form>
+          <!-- <form id = "uploadForm">
+              <input type="file" name="file" />
+              <input type = "button" onclick="uploadZipTechAssign()" value="Submit">
+          </form> -->
+        </ul>
+      </div>
+    </nav>
+
+
+    <!-- First Page Section Here-->
+      <div class= "row mt-4" >
+          <!--Table Set Up -->
+         <div class="col-md-10 col-sm-10 table-responsive" ng-app="projectTableBuild" ng-controller="tableController">
+					<h3 class="text-center">Open Project List</h3>
+            <table class="table col-md-12 col-sm-12">
+               <thead>
+                  <tr>
+                     <th>Project Name</th>
+                     <th>Total Devices</th>
+                     <th>Est. TSR Hours</th>
+                     <th>Est. DNI Hours</th>
+                     <th style="width:200px;">Address File</th>
+                     <th>Project Editing</th>
+                  </tr>
+               </thead>
+               <tbody>
+                    <tr ng-repeat="x in names">
+                        <td>{{x.project_name}}</td>
+                        <td>{{x.total_devices}}</td>
+                        <td>{{x.estimated_tsr_hours}}</td>
+                        <td>{{x.estimated_dni_hours}}</td>
+                        <td>
+                            <button type="button" class="btn btn-primary btn-sm">ADD</button>
+                            <button type="button" class="btn btn-info btn-sm">DELETE</button>
+                        </td>
+                        <td><button class="btn btn-sm btn-primary" type="submit">EDIT</button></td>
+                    </tr>
+               </tbody>
+            </table>
+         </div>
+<!--				 Project Add and Adress File button set up-->
+         <div class="col-md-2 col-sm-2 mt-4" style="float:right;">
+
+                <button type="button" id="addFile" onclick="addFile()" class="btn btn-primary">Add Address File</button><br/><br/>
+
+                <button type="button" id="addProject" onclick="addProject()" class="btn btn-primary">Add Project</button>
+
+
+<!--
+						<form id="projectAdd">
+								<input type="text" name="name" > <br>
+								<input type="int" name="totalDevices" ><br>
+								<input type="int" name="tsr" > <br>
+								<input type="int" name="dni" ><br>
+								<input type = "button" onclick="addProject(document.getElementById('projectAdd').name.value, document.getElementById('projectAdd').totalDevices.value, document.getElementById('projectAdd').tsr.value, document.getElementById('projectAdd').dni.value)" value="Submit" >
+						</form>
+
+
+         <div class = "col-sm-2" id="demo">
+         </div>
+			<select ng-model="selectedProject" ng-options="x.project_name for x in names" ng-controller="tableController">
+         </select>
+-->
+      </div>
+
+    </div>
+
+    <!--			Forecast table set up-->
+    <div>
+
+        <div class="col-sm-12"  ng-controller="forecastTableController">
+            <h3 class="text-center">Open Forecast List</h3>
+            <table class="table">
+               <thead>
+                  <tr>
+                     <th>Project Name</th>
+                     <th>Jan</th>
+                     <th>Feb</th>
+                     <th>Mar</th>
+                            <th>Apr</th>
+                     <th>May</th>
+                     <th>Jun</th>
+                            <th>Jul</th>
+                     <th>Aug</th>
+                     <th>Sep</th>
+                            <th>Oct</th>
+                     <th>Nov</th>
+                     <th>Dec</th>
+                  </tr>
+               </thead>
+               <tbody>
+                    <tr ng-repeat="x in name">
+                        <td>Project Name</td>
+                        <td>{{x.Jan}}</td>
+                        <td>{{x.Feb}}</td>
+                        <td>{{x.Mar}}</td>
+                        <td>{{x.Apr}}</td>
+                        <td>{{x.May}}</td>
+                        <td>{{x.Jun}}</td>
+                        <td>{{x.Jul}}</td>
+                        <td>{{x.Aug}}</td>
+                        <td>{{x.Sep}}</td>
+                        <td>{{x.Oct}}</td>
+                        <td>{{x.Nov}}</td>
+                        <td>{{x.Dec}}</td>
+                    </tr>
+               </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+
+        <script>
+
+				//add new adress file to a project function
+         function addFile() {
+         				var xhttp = new XMLHttpRequest();
+         				xhttp.onreadystatechange = function() {
+         					if (this.readyState == 4 && this.status == 200) {
+         						this.responseText;
+         					}
+         				};
+         				xhttp.open("POST", "uwb00034.ute.fedex.com/node/strat/addadress", true);
+         				xhttp.send();
+         	}
+				//add new project to the database
+				  function addProject(name, totalDevices, tsr, dni) {
+								var url = '?name=' + name + '&totalDevices=' + totalDevices + '&tsr=' + tsr + '&dni=' + dni + '';
+         				var xhttp = new XMLHttpRequest();
+         				xhttp.onreadystatechange = function() {
+         					if (this.readyState == 4 && this.status == 200) {
+         						//document.getElementById("demo").innerHTML =
+         						//this.responseText;
+         					}
+         				};
+									xhttp.open("POST", "strat/uploadProjectToServer/" + url + "" , true);
+									xhttp.send();
+         			}
+          // //add new zip tech assignment to the database
+          //       function uploadZipTechAssign() {
+          //             //var url = '?name=' + name + '&totalDevices=' + totalDevices + '&tsr=' + tsr + '&dni=' + dni + '';
+          //             var xhttp = new XMLHttpRequest();
+          //             //var file = $('#uploadForm')[0].files[0];
+          //             var file = $("input:file").data();
+          //             var fd = new FormData();
+          //             fd.append('theFile', file);
+          //             // xhttp.onreadystatechange = function() {
+          //             //   // if (this.readyState == 4 && this.status == 200) {
+          //             //   //   //document.getElementById("demo").innerHTML =
+          //             //   //   //this.responseText;
+          //             //   // }
+          //             // };
+          //               xhttp.open("POST", "uploadZipTechAssign" , fd, true);
+          //               xhttp.send();
+          //           }
+				//Build project table using angular js
+				var app = angular.module('projectTableBuild', []);
+				app.controller('tableController', function($scope, $http) {
+				$http.post("/node/strat/getallprojects")
+				.then(function (response) {
+					$scope.names = response.data;
+					});
+				});
+
+				//build forecast table using angular js
+				//var app = angular.module('projectTableBuild', []);
+				app.controller('forecastTableController', function($scope, $http) {
+				$http.post("/node/strat/getallforecast")
+				.then(function (response) {
+					$scope.name = response.data;
+					});
+				});
+
+      </script>
+
+
+</body>
+</html>

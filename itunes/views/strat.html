@@ -1,0 +1,379 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="en-us">
+<head>
+    <title>ITUNES</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="shortcut icon" href="/image/favicon.ico">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="/itunes/views/css/navstyle.min.css">
+    <!-- jQuery first, then Tether, then Bootstrap JS. -->
+    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>      
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="/itunes/views/js/date_time.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+
+    <style>
+    #container {
+        width: 60%;
+        background-color: #FFFFFF;
+        margin-bottom: 0px;
+        margin: 0 auto;
+        text-align: left;
+        min-height: 600px;
+    }
+
+    .header-bkground{
+        padding: 0;
+        margin: 0;
+        background: url(/itunes/views/images/header-background.gif) repeat-y right;
+        overflow: hidden;  /* fixes a gap specific to IE */
+        height:75px;
+    }
+
+
+    .time {
+        padding:1px;
+        padding-right:23px;
+        padding-left:15px;
+        position: relative;
+        top:10px;
+        bottom:0px;
+    }
+        
+        
+    </style>
+
+</head>
+
+<body>
+<div id="container" ng-app="projectTableBuild" ng-controller="tableController">
+    
+    <div class="header-bkground">
+        <div class="stock time float-right">
+            <b><span id="date_time"></span> </b>
+            <script type="text/javascript">window.onload = date_time('date_time');</script>
+        </div>
+
+        <div id="header" class="clear">
+            <div class="float-left LeftRightMargin-10px top-position-alt">
+                <a href="http://www.fedex.com"><img src="/itunes/views/images/logo.png" title="FedEx.com" alt="www.fedex.com" width="170" height="80" border="0" /></a>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <!--Nav Bar Set Up -->
+        <nav class="navbar navbar-toggleable-md navbar-light bg-faded">
+          <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+          </button>
+
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+              <li class="nav-item active">
+                <a class="nav-link" href="strat">Strategic Network Planner </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="stratover">Strategic Overview <span class="sr-only">(current)</span></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="field">Field Network Planner</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="fieldover">Field Overview</a>
+              </li>
+    <!--
+              <form id = "uploadForm" enctype   =  "multipart/form-data" action = "uploadZipTechAssign" method = "post">
+                  <input type="file" name="file" />
+                  <input type="submit" value="Add Zip Tech Assignment" name="submit">
+              </form>
+    -->
+            </ul>
+          </div>
+        </nav>
+    </div>
+
+
+
+    <!-- First Page Section Here-->
+      <div class= "row">
+          
+          <div class="col-sm-12 col-md-12">
+             <div style="background-color:#4D148C; width:100%; height:50px;">
+             <h5 style="text-align:center; position:relative; top:25%; color:white;">FY18 Open Project List
+                 <a><i class="fa fa-plus" id="addproject" style="margin-left:20px;" aria-hidden="true"></i>
+                 </a>
+             </h5>
+            </div>
+             <div id="projectForm" style="display:none;">
+                <br/>
+                <form class="form-inline">
+                    <div class="row">
+                        <div class="form-group col-sm-4 col-md-4" style="margin-bottom:20px;">
+                            <label for="projectName">Project Name</label>
+                            <input type="text" class="form-control" id="projectName" placeholder="Project Name" style="margin-left:10px;">
+                        </div>
+                        <div class="form-group col-sm-4 col-md-4" style="margin-bottom:20px;">
+                            <label for="OPCO">Operating Company</label>
+                            <select class="form-control" id="OPCO" style="margin-left:10px;">
+                                <option>FTN</option>
+                                <option>FXCC</option>
+                                <option>FXE</option>
+                                <option>FXE/FXS</option>
+                                <option>FXF</option>
+                                <option>FXG</option>
+                                <option>FXO</option>
+                                <option>FXS</option>
+                                <option>FXTN</option>                  
+                            </select>
+                        </div>
+                        <div class="form-group col-sm-4 col-md-4" style="margin-bottom:20px;">
+                            <label for="totalDevices">Total Devices</label>
+                            <input type="text" class="form-control" id="totalDevices" placeholder="Total Devices" style="margin-left:10px;">
+                        </div>
+                        <div class="form-group col-sm-6 col-md-6" style="margin-bottom:20px;">
+                            <label for="esttsrhours">Estimated TSR Hours per Activity</label>
+                            <input type="text" class="form-control" id="esttsrhours" placeholder="Estimated TSR Hours per Activity" style="margin-left:10px;">
+                        </div>
+                        <div class="form-group col-sm-6 col-md-6" style="margin-bottom:20px;">
+                            <label for="estdnihours">Estimated DNI Hours per Activity</label>
+                            <input type="text" class="form-control" id="estdnihours" placeholder="Estimated DNI Hours per Activity" style="margin-left:10px;">
+                        </div>
+                        <div class="form-group col-sm-6 col-md-6">
+                            <label for="addressfileinput">Address File input</label>
+                            <input type="file" id="addressfileinput">
+                            <p class="help-block">Please upload address file for the project here. The file should be excel files.</p>
+                        </div>
+                        <div class="form-group col-sm-6 col-md-6" style="float:right;">
+                            <button type="submit" class="btn btn-default">Submit</button>
+                        </div>
+                    </div>     
+                </form>
+             </div>
+          </div>
+ 
+    </div>
+     
+    <div>    
+         <div style="overflow-y:auto; height:400px; padding:0;">
+             
+            <table class="table table-striped table-bordered">   
+                <thead>
+                    <tr style="text-align:left;">
+                        <th>Project Name</th>
+                        <th>OPCO</th>
+                        <th>Total Devices</th>
+                        <th>TSR Hour/Act</th>
+                        <th>DNI Hour/Act</th>
+                        <th>Address File</th>
+                        <th>Project Editing</th>
+                    </tr>
+                </thead>    
+                <tbody>
+                    <tr ng-repeat="x in names" style="text-align:left;">
+                        <td style="font-weight:bold;">{{x.project_name}}</td>
+                        <td>{{x.opco}}</td>
+                        <td>{{x.total_devices}}</td>
+                        <td>{{x.estimated_tsr_hours}}</td>
+                        <td>{{x.estimated_dni_hours}}</td>
+                        <td>
+                            <i class="fa fa-plus" style="margin-right:20px;" aria-hidden="true"></i>
+                            <i class="fa fa-minus" aria-hidden="true"></i>
+                        </td>
+                        <td>
+                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+         </div>      
+
+    </div>
+<!--
+						<form id="projectAdd">
+								<input type="text" name="name" > <br>
+								<input type="int" name="totalDevices" ><br>
+								<input type="int" name="tsr" > <br>
+								<input type="int" name="dni" ><br>
+								<input type = "button" onclick="addProject(document.getElementById('projectAdd').name.value, document.getElementById('projectAdd').totalDevices.value, document.getElementById('projectAdd').tsr.value, document.getElementById('projectAdd').dni.value)" value="Submit" >
+						</form>
+
+
+         <div class = "col-sm-2" id="demo">
+         </div>
+			<select ng-model="selectedProject" ng-options="x.project_name for x in names" ng-controller="tableController">
+         </select>
+-->
+
+  
+
+    <!--			Forecast table set up-->
+     <div class= "row" style="margin-top:50px;">
+          
+          <div class="col-sm-12 col-md-12">
+             <div style="background-color:#4D148C; width:100%; height:50px;">
+             <h5 style="text-align:center; position:relative; top:25%; color:white;">FY18 Open Forecast List
+                 <a><i class="fa fa-plus" id="addproject" style="margin-left:20px;" aria-hidden="true"></i>
+                 </a>
+             </h5>
+            </div>
+             <div id="projectForm" style="display:none;">
+                <br/>
+                <form>
+                  <div class="form-group">
+                    <label for="projectName">Project Name</label>
+                    <input type="text" class="form-control" id="projectName" placeholder="Project Name">
+                  </div>
+                  <div class="form-group">
+                    <label for="totalDevices">Total Devices</label>
+                    <input type="text" class="form-control" id="totalDevices" placeholder="Total Devices">
+                  </div>
+                  <div class="form-group">
+                    <label for="esttsrhours">Estimated TSR Hours</label>
+                    <input type="text" class="form-control" id="esttsrhours" placeholder="Estimated TSR Hours">
+                  </div>
+                  <div class="form-group">
+                    <label for="estdnihours">Estimated DNI Hours</label>
+                    <input type="text" class="form-control" id="estdnihours" placeholder="Estimated DNI Hours">
+                  </div>
+                  <div class="form-group">
+                    <label for="addressfileinput">Address File input</label>
+                    <input type="file" id="addressfileinput">
+                    <p class="help-block">Please upload address file for the project here. The file should be excel files.</p>
+                  </div>
+                  <button type="submit" class="btn btn-default">Submit</button>
+                </form>
+             
+             </div>
+          </div>
+ 
+    </div>
+    
+    
+    
+     <div>    
+         <div style="overflow-y:auto; height:400px; padding:0;" ng-controller="forecastTableController">
+
+            <table class="table table-striped table-bordered">
+               <thead>
+                  <tr style="text-align:left;">
+                     <th>Project Name</th>
+                     <th>Jan</th>
+                     <th>Feb</th>
+                     <th>Mar</th>
+                     <th>Apr</th>
+                     <th>May</th>
+                     <th>Jun</th>
+                     <th>Jul</th>
+                     <th>Aug</th>
+                     <th>Sep</th>
+                     <th>Oct</th>
+                     <th>Nov</th>
+                     <th>Dec</th>
+                  </tr>
+               </thead>
+               <tbody>
+                    <tr ng-repeat="x in name">
+                        <td>Name</td>
+                        <td>{{x.Jan}}</td>
+                        <td>{{x.Feb}}</td>
+                        <td>{{x.Mar}}</td>
+                        <td>{{x.Apr}}</td>
+                        <td>{{x.May}}</td>
+                        <td>{{x.Jun}}</td>
+                        <td>{{x.Jul}}</td>
+                        <td>{{x.Aug}}</td>
+                        <td>{{x.Sep}}</td>
+                        <td>{{x.Oct}}</td>
+                        <td>{{x.Nov}}</td>
+                        <td>{{x.Dec}}</td>
+                    </tr>
+               </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <div style="margin-top:20px;"></div>
+    
+
+</div>
+
+
+        <script>
+
+				//add new adress file to a project function
+         function addFile() {
+         				var xhttp = new XMLHttpRequest();
+         				xhttp.onreadystatechange = function() {
+         					if (this.readyState == 4 && this.status == 200) {
+         						this.responseText;
+         					}
+         				};
+         				xhttp.open("POST", "uwb00034.ute.fedex.com/node/strat/addadress", true);
+         				xhttp.send();
+         	}
+				//add new project to the database
+				  function addProject(name, totalDevices, tsr, dni) {
+								var url = '?name=' + name + '&totalDevices=' + totalDevices + '&tsr=' + tsr + '&dni=' + dni + '';
+         				var xhttp = new XMLHttpRequest();
+         				xhttp.onreadystatechange = function() {
+         					if (this.readyState == 4 && this.status == 200) {
+         						//document.getElementById("demo").innerHTML =
+         						//this.responseText;
+         					}
+         				};
+									xhttp.open("POST", "strat/uploadProjectToServer/" + url + "" , true);
+									xhttp.send();
+         			}
+          // //add new zip tech assignment to the database
+          //       function uploadZipTechAssign() {
+          //             //var url = '?name=' + name + '&totalDevices=' + totalDevices + '&tsr=' + tsr + '&dni=' + dni + '';
+          //             var xhttp = new XMLHttpRequest();
+          //             //var file = $('#uploadForm')[0].files[0];
+          //             var file = $("input:file").data();
+          //             var fd = new FormData();
+          //             fd.append('theFile', file);
+          //             // xhttp.onreadystatechange = function() {
+          //             //   // if (this.readyState == 4 && this.status == 200) {
+          //             //   //   //document.getElementById("demo").innerHTML =
+          //             //   //   //this.responseText;
+          //             //   // }
+          //             // };
+          //               xhttp.open("POST", "uploadZipTechAssign" , fd, true);
+          //               xhttp.send();
+          //           }
+				//Build project table using angular js
+				var app = angular.module('projectTableBuild', []);
+				app.controller('tableController', function($scope, $http) {
+				$http.post("/node/strat/getallprojects")
+				.then(function (response) {
+					$scope.names = response.data;
+					});
+				});
+
+				//build forecast table using angular js
+				//var app = angular.module('projectTableBuild', []);
+				app.controller('forecastTableController', function($scope, $http) {
+				$http.post("/node/strat/getallforecast")
+				.then(function (response) {
+					$scope.name = response.data;
+					});
+				});
+            
+            
+            $('#addproject').click(function() {
+                $('#projectForm').toggle();
+            });
+
+      </script>
+
+
+</body>
+</html>

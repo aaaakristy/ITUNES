@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="/itunes/views/css/navstyle.min.css">
+    <style>
+      #container {
+      width: 60%;
+      background-color: #FFFFFF;
+      margin-bottom: 0px;
+      margin: 0 auto;
+      text-align: left;
+      min-height: 600px;
+      }
+      .header-bkground{
+      padding: 0;
+      margin: 0;
+      background: url(/itunes/views/images/header-background.gif) repeat-y right;
+      overflow: hidden;  /* fixes a gap specific to IE */
+      height:75px;
+      }
+      .time {
+      padding:1px;
+      padding-right:23px;
+      padding-left:15px;
+      position: relative;
+      top:10px;
+      bottom:0px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- jQuery first, then Tether, then Bootstrap JS. -->
+    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+    <script src="https://www.amcharts.com/lib/3/amcharts.js"></script>
+    <script src="https://www.amcharts.com/lib/3/serial.js"></script>
+    <script src="https://www.amcharts.com/lib/3/plugins/export/export.min.js"></script>
+    <link rel="stylesheet" href="https://www.amcharts.com/lib/3/plugins/export/export.css" type="text/css" media="all" />
+    <script src="https://www.amcharts.com/lib/3/themes/light.js"></script>
+    <script type="text/javascript" src="/itunes/views/js/date_time.js"></script>
+    <div id="container">
+      <div class="header-bkground">
+        <div class="stock time float-right">
+          <b><span id="date_time"></span> </b>
+          <script type="text/javascript">window.onload = date_time('date_time');</script>
+        </div>
+        <div id="header" class="clear">
+          <div class="float-left LeftRightMargin-10px top-position-alt">
+            <a href="http://www.fedex.com"><img src="/itunes/views/images/logo.png" title="FedEx.com" alt="www.fedex.com" width="170" height="80" border="0" /></a>
+          </div>
+        </div>
+      </div>
+      <nav class="navbar navbar-toggleable-md navbar-light bg-faded">
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" href="strat">Strategic Network Planner </a>
+            </li>
+            <li class="nav-item active">
+              <a class="nav-link" href="stratover">Strategic Overview <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="field">Field Network Planner</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="fieldover">Field Overview</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+      <div id="chartdiv"></div>
+      <div id="test"></div>
+    </div>
+  </body>
+  <style>
+    #chartdiv {
+    width: 100%;
+    height: 500px;
+    }
+  </style>
+
+  /**JS script start**/
+  <script>
+  var chartData;
+
+
+  //requests forecast + Project data from database
+  function loadUtilizationData(callback) {
+      var xhttp = new XMLHttpRequest();
+      xhttp.open("GET", "stratover/getDataforChart/", true);
+      xhttp.send();
+      xhttp.onreadystatechange = function() {
+          if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
+              // alert("this.responseText");
+              //document.getElementById('test').innerHTML = this.responseText;
+              callback(this.responseText);;
+          }
+      };
+  }
+
+  //calculating values ffor the utilization chart
+  loadUtilizationData(function(data) {
+      data = JSON.parse(data);
+      //list with total tsr_hours each month
+      var tsr_hours_months = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+      //list with total project_devices for each month
+      var project_devices = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+      for (var index in data) {
+          project_devices[0] += data[index]["Jan"];
+          project_devices[1] += data[index]["Feb"];
+          project_devices[2] += data[index]["Mar"];
+          project_devices[3] += data[index]["Apr"];
+          project_devices[4] += data[index]["May"];
+          project_devices[5] += data[index]["Jun"];
+          project_devices[6] += data[index]["Jul"];
+          project_devices[7] += data[index]["Aug"];
+          project_devices[8] += data[index]["Sep"];
+          project_devices[9] += data[index]["Oct"];
+          project_devices[10] += data[index]["Nov"];
+          project_devices[11] += data[index]["Dec"];
+
+
+      }
+
+      var chart = AmCharts.makeChart("chartdiv", {
+          "type": "serial",
+          "theme": "light",
+          "legend": {
+              "equalWidths": false,
+              "useGraphSettings": true,
+              "valueAlign": "left",
+              "valueWidth": 120
+          },
+          /**
+          data provider index
+          month = the month
+          total_devices = total devices for a month
+          total_tsr_hours = tsr hours for a month
+          **/
+          "dataProvider": [{
+              "month": "Jan",
+              "total_devices": project_devices[0],
+              "total_tsr_hours": 25,
+              "latitude": 40.71,
+              "duration": 408
+          }, {
+               "month": "Feb",
+              "total_devices": project_devices[1],
+              "total_tsr_hours": 25,
+              "latitude": 60.71,
+              "duration": 408
+          }, {
+               "month": "Mar",
+              "total_devices": project_devices[2],
+              "total_tsr_hours": 25,
+              "latitude": 50.71,
+              "duration": 408
+          }, {
+              "month": "Apr",
+              "total_devices": project_devices[3],
+              "total_tsr_hours": 14,
+              "latitude": 38.89,
+              "duration": 482
+          }, {
+              "month": "May",
+              "total_devices": project_devices[4],
+              "total_tsr_hours": 14,
+              "latitude": 18.89,
+              "duration": 482
+          }, {
+              "month": "Jun",
+              "total_devices": project_devices[5],
+              "month": "Jun",
+              "total_tsr_hours": 15,
+              "latitude": 28.89,
+              "duration": 482
+          }, {
+              "month": "Jul",
+              "total_devices": project_devices[6],
+              "total_tsr_hours": 16,
+              "latitude": 31.89,
+              "duration": 482
+          }, {
+              "month": "Aug",
+              "total_devices": project_devices[7],
+              "total_tsr_hours": 14,
+              "latitude": 38.89,
+              "duration": 482
+          }, {
+                "month": "Sep",
+              "total_devices": project_devices[8],
+              "total_tsr_hours": 14,
+              "latitude": 18.89,
+              "duration": 482
+          }, {
+              "month": "Oct",
+              "total_devices": project_devices[9],
+              "total_tsr_hours": 14,
+              "latitude": 48.89,
+              "duration": 482
+          }, {
+              "month": "Nov",
+              "total_devices": project_devices[10],
+              "total_tsr_hours": 14,
+              "latitude": 38.89,
+              "duration": 482
+          }, {
+              "month": "Dec",
+              "total_devices": project_devices[11],
+              "total_tsr_hours": 6,
+              "latitude": 14.22,
+              "duration": 562
+              //this is for fading and broken column bar lines
+              // "dashLength": 8,
+              // "alpha": 0.4
+          }],
+          //labeling the cordinate axis
+          "valueAxes": [{
+              "id": "Units",
+              "axisAlpha": 0,
+              "gridAlpha": 0,
+              "position": "left",
+              "title": "Hours"
+          }, {
+              "id": "month",
+              "axisAlpha": 0,
+              "gridAlpha": 0,
+              "labelsEnabled": false,
+              "position": "right",
+              "title": "Months"
+          }, {
+              "id": "durationAxis",
+              "duration": "mm",
+              "durationUnits": {
+                  "hh": "h ",
+                  "mm": "min"
+              },
+              "axisAlpha": 0,
+              "gridAlpha": 0,
+              "inside": true,
+              "position": "right",
+              "title": "duration"
+          }],
+          "graphs": [{
+              "labelText": "[[value]] ",
+              "labelPosition": "inside",
+              //   "labelFunction": function( item ) {
+              //   return item.values.value;
+              // },
+              "alphaField": "alpha",
+              "balloonText": "[[value]] ",
+              "dashLengthField": "dashLength",
+              "fillAlphas": 0.7,
+              "legendPeriodValueText": "total: [[value.sum]] ",
+              "legendValueText": "[[value]] ",
+              "title": "Project Device",
+              "type": "column",
+              "valueField": "total_devices",
+              "valueAxis": "totalDevicesAxis"
+
+          }, {
+              "labelText": "[[value]] ",
+              "labelPosition": "inside",
+              "alphaField": "alpha1",
+              "balloonText": "[[value]] hours",
+              "dashLengthField": "dashLength",
+              "fillAlphas": 0.7,
+              "legendPeriodValueText": "total: [[value.sum]] hrs",
+              "legendValueText": "[[value]] hrs",
+              "title": "TSR Efforts(Hrs)",
+              "type": "column",
+              "valueField": "total_tsr_hours",
+              "valueAxis": "distanceAxis"
+          }, {
+              "balloonText": "utilization:[[value]]",
+              "bullet": "round",
+              "bulletBorderAlpha": 1,
+              "useLineColorForBulletBorder": true,
+              "bulletColor": "#FFFFFF",
+              // "bulletSizeField": "total_tsr_hours",
+              "dashLengthField": "dashLength",
+              "descriptionField": "townName",
+              "labelPosition": "right",
+              "labelText": "[[value]]",
+              "legendValueText": "[[value]]%",
+              "title": "TSR Utilization",
+              "fillAlphas": 0,
+              "valueField": "latitude",
+              "valueAxis": "latitudeAxis"
+          }, ],
+          "chartCursor": {
+              "categoryBalloonDateFormat": "DD",
+              "cursorAlpha": 0.1,
+              "cursorColor": "#000000",
+              "fullWidth": true,
+              "valueBalloonsEnabled": false,
+              "zoomable": false
+          },
+          "dataDateFormat": "YYYY-MM-DD",
+          "categoryField": "month",
+          "categoryAxis": {
+              "gridPosition": "start",
+              "axisAlpha": 0,
+              "tickLength": 0
+          },
+          "export": {
+              "enabled": true
+          }
+      });
+  });
+  </script>
+</html>
